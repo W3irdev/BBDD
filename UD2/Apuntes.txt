@@ -1,0 +1,33 @@
+El modelo conceptual de datos se consigue a traves del modelo entidad/relacion
+
+El siguiente paso modelo logico de datos se consigue a traves del modelo relacional
+
+El modelo fisico es la base de datos en el sistema informatico.
+
+Normalizacion del modelo, serie de instrucciones que se lleva a cabo entre el modelo relacional y el modelo fisico.
+
+Modelo Entidad/Relacion --> Modelo Relacional --> Modelo Fisico
+
+Fuerte: Existen por si misma y no depende de nadie para existir
+Debiles: dependen de un padre para existir
+
+Debil en identificacion significa que no puede validarse sin la identificacion del padre.
+El atributo de la relacion ocurre cuando se produce la accion. (Atributos en rombo)
+
+Ej:
+
+Libro:
+
+ID 123 La historia interminable --> ID 1 Introduccion    necesita de 123. para 1.Introduccion
+						   2 El mar
+
+ID 124 La historia que si termina --> ID 1 Introduccion    Si solo cogiese 1. Introduccion tambien me cogeria el de ID 123
+						     2 El desierto
+
+Cuando se es debil en indentificacion se hacen 2 preguntas 1º Existencia(Se puede identificar hijo sin el padre) si cumple se pone E en el rombo
+											 2º Identificacion (Se necesita la clave del padre para identificarse) Se coloca I en el rombo
+
+
+En las relaciones jerarquica hay que definir si son parciales y totales y ademas exclusiva o inclusiva.
+Se hace en jerarquia, cuando haya informacion diferente en los hijos.
+
