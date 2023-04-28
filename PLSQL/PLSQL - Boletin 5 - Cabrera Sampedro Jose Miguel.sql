@@ -178,3 +178,25 @@ begin
     end loop;
     close c_emp;
 end;
+
+
+SELECT d.DEPTNO , e.EMPNO 
+FROM DEPT d , EMP e 
+WHERE d.DEPTNO = e.DEPTNO 
+ORDER BY e.HIREDATE ;
+
+CREATE OR REPLACE PROCEDURE DUMMY.BORRAR_EMP IS
+	--cursor explícito para recuperar departamentos
+    CURSOR C_DEPT IS 
+	SELECT * FROM DEPT;
+	--cursor explícito para recupara empleado por cada departamento
+	CURSOR C_EMP(V_DEPT DEPT.DEPTNO%TYPE) IS
+	SELECT * FROM (SELECT E.* FROM EMP E
+	WHERE E.DEPTNO=V_DEPT
+	ORDER BY E.HIREDATE)
+	WHERE ROWNUM<=2;
+
+BEGIN 
+	FOR registro_dept IN C_DEPT LOOP	
+		FOR REGISTRO_EMP IN C_EMP(registro_dept.deptno) LOOP	
+			DELETE FROM EMP WHERE EMPNO=REGISTRO_EMP.EMPNO;
