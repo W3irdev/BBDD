@@ -13,7 +13,7 @@ Crear un trigger sobre la tabla EMPLEADOS para que no se permita que un empleado
 sea jefe de más de cinco empleados.*/
 
 CREATE OR REPLACE TRIGGER jefes
-BEFORE INSERT ON empleados
+BEFORE INSERT OR UPDATE ON empleados
 FOR EACH ROW 
 DECLARE 
 jefes NUMBER:=0;
@@ -23,7 +23,7 @@ BEGIN
 	FROM EMPLEADOS e  
 	WHERE e.jefe = :NEW.jefe ;
 
-	IF jefes>4 THEN
+	IF jefes>5 THEN
 		raise_application_error(-20600,:new.jefe||' No puede tener mas de 5 jefes');
 	END IF;
 	
@@ -35,7 +35,7 @@ Crear un trigger para impedir que se aumente el salario de un empleado en más d
 20%. */
 
 CREATE OR REPLACE TRIGGER aumento_salario
-BEFORE UPDATE ON EMPLEADOS 
+BEFORE UPDATE OF SALARIO ON EMPLEADOS 
 FOR EACH ROW 
 BEGIN 
 	
@@ -292,20 +292,17 @@ BEGIN
 		comentario:='Pedido entregado antes de lo esperado';
 	END IF;
 
-	UPDATE pedidos SET COMENTARIOS = comentario;
+	UPDATE pedidos SET COMENTARIOS = comentario where CODIGOPEDIDO=:OLD.CODIGOPEDIDO;
 END;
 
 CREATE OR REPLACE TRIGGER compareFechaEjercicio9
 BEFORE UPDATE ON PEDIDOS 
-FOR EACH ROW 
+FOR EACH ROW WHEN (:NEW.FECHAENTREGA>:NEW.FECHAESPERADA)
 DECLARE 
-comentario clob:='Pedido entregado antes de lo esperado';
+comentario clob:='Pedido entregado con retraso';
 BEGIN 
-	IF updating('FECHAENTREGA') AND :NEW.FECHAENTREGA>:NEW.FECHAESPERADA THEN 
-		comentario:='Pedido entregado con retraso';
-	END IF;
 
-	UPDATE pedidos SET COMENTARIOS = comentario;
+	UPDATE pedidos SET COMENTARIOS = comentario where CODIGOPEDIDO=:OLD.CODIGOPEDIDO;
 END;
 
 
